@@ -21,6 +21,7 @@ public class changeLevel : MonoBehaviour
             PlayerPrefs.SetString("PreviousEntryPoint", entryPoint);
 
             // Cargar la nueva escena
+            Debug.Log(sceneToLoad);
             SceneManager.LoadScene(sceneToLoad);
         }
     }
