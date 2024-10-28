@@ -4,24 +4,30 @@ using UnityEngine;
 
 public class SpikeMovement : MonoBehaviour
 {
-    // Velocidad de movimiento hacia la izquierda
     public float speed = 5f;
-
-    // Velocidad de rotación (en grados por segundo)
     public float rotationSpeed = 100f;
     public GameObject SpikedBall;
-    private void Start()
+    private Rigidbody2D rb; 
+    void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         
     }
-
+    void Start()
+    {
+        SetProjectile();
+    }
+    public void SetProjectile()
+    {
+        rb.velocity = new Vector2(speed, 0); 
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Spawner.spawner.stack.Push(gameObject);
+    }
     // Update se llama una vez por frame
     void Update()
     {
-        // Mover el GameObject hacia la izquierda (en el eje X negativo) en el plano 2D
-        transform.Translate(Vector2.left * speed * Time.deltaTime);
-
-        // Rotar el GameObject en el eje Z (giro en 2D)
         SpikedBall.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
     }
 }
