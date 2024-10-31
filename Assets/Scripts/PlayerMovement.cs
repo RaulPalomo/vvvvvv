@@ -117,7 +117,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (other.CompareTag("DeathZone"))
         {
-            
+            rb.velocity = new Vector2(0, 0);
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
             RespawnAtCheckpoint();
         }
     }
@@ -156,6 +157,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Esperar a que la animación de muerte termine
         yield return new WaitForSeconds(0.3f);
+        
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         // La animación de muerte ha terminado, ahora respawn en el checkpoint
         if (lastCheckpointPosition != Vector2.zero)

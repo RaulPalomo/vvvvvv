@@ -9,51 +9,52 @@ public class Spawner : MonoBehaviour
     public GameObject SpawnPoint;
     public static Spawner spawner;
     public Stack<GameObject> stack;
-    
+
     void Start()
     {
-        if(Spawner.spawner != null && Spawner.spawner!=this)
-        
+        // Singleton pattern para evitar duplicados
+        if (Spawner.spawner != null && Spawner.spawner != this)
             Destroy(gameObject);
         Spawner.spawner = this;
+
         stack = new Stack<GameObject>();
         StartCoroutine(Spawn());
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Push(GameObject obj)
     {
-        Debug.Log(obj.name);
+        // Desactiva el objeto y lo agrega a la pila para reutilización
         obj.SetActive(false);
         stack.Push(obj);
     }
+
     public GameObject Pop()
     {
         GameObject obj = stack.Pop();
         obj.SetActive(true);
         obj.transform.position = SpawnPoint.transform.position;
+        obj.GetComponent<SpikeMovement>().SetProjectile(); // Reactiva el movimiento
         return obj;
     }
-    public GameObject Peek()
-    {
-        return stack.Peek();
-    }
+
     private IEnumerator Spawn()
     {
-        if(stack.Count != 0)
+        while (true) // Utiliza un bucle infinito controlado por tiempo
         {
-            Pop();
+            if (stack.Count != 0)
+            {
+                // Reutiliza un objeto de la pila
+                Pop();
+            }
+            else
+            {
+                // Crea un nuevo objeto si la pila está vacía
+                GameObject newSpike = Instantiate(SpikedBall, SpawnPoint.transform.position, Quaternion.identity);
+                newSpike.GetComponent<SpikeMovement>().SetProjectile(); // Configura el movimiento
+            }
+
+            // Espera el tiempo especificado antes de la siguiente ejecución
+            yield return new WaitForSeconds(time);
         }
-        else
-        {
-            Instantiate(SpikedBall, SpawnPoint.transform.position, Quaternion.identity);
-        }
-        yield return new WaitForSeconds(time);
-        yield return Spawn();
     }
 }
