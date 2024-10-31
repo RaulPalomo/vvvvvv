@@ -6,28 +6,37 @@ public class SpikeMovement : MonoBehaviour
 {
     public float speed = 5f;
     public float rotationSpeed = 100f;
-    public GameObject SpikedBall;
-    private Rigidbody2D rb; 
+    private Rigidbody2D rb;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        
     }
+
     void Start()
     {
         SetProjectile();
     }
+
     public void SetProjectile()
     {
-        rb.velocity = new Vector2(speed, 0); 
+        // Configura la velocidad inicial del proyectil
+        rb.velocity = new Vector2(speed, 0);
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Spawner.spawner.stack.Push(gameObject);
+        if(!collision.gameObject.CompareTag("Player"))
+        {
+            rb.velocity = Vector2.zero;
+            Spawner.spawner.Push(gameObject);
+        }
+        
     }
-    // Update se llama una vez por frame
+
     void Update()
     {
-        SpikedBall.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+        // Rota el proyectil cada frame
+        transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
     }
 }
