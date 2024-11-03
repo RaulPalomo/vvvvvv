@@ -5669,7 +5669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5086047aba85c7f4a8b44e7ec6a992a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Level4
+  sceneToLoad: Final
   entryPoint: front
 --- !u!1 &794047881
 GameObject:
