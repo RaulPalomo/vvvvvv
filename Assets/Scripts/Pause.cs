@@ -49,7 +49,7 @@ public class Pause : MonoBehaviour
 
     public void SalirMenu()
     {
-        
+        Destroy(GameObject.FindWithTag("Player"));
         SceneManager.LoadScene("MainMenu");
         Time.timeScale = 1f;
         juegoPausado = false;
