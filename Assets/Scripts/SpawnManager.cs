@@ -5,24 +5,38 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public Transform spawnPointFromFront; 
-    public Transform spawnPointFromBack; 
-    
+    public Transform spawnPointFromBack;
+    public GameObject playerPrefab;
 
+    private GameObject playerInstance;
+    private void Awake()
+    {
+        playerInstance = GameObject.FindWithTag("Player");
+
+        // Implementación del patrón Singleton
+        if (playerInstance == null)
+        {
+            playerInstance = Instantiate(playerPrefab);
+            DontDestroyOnLoad(playerInstance);
+        }
+       
+        
+    }
     void Start()
     {
-        // Obtener el punto de entrada anterior desde PlayerPrefs
+        
         string previousEntryPoint = PlayerPrefs.GetString("PreviousEntryPoint", "front");
 
         // Mover al jugador dependiendo de su origen
         if (previousEntryPoint == "front")
         {
             // Mover el jugador al punto correspondiente
-            GameObject.FindWithTag("Player").transform.position = spawnPointFromFront.position;
+            playerInstance.transform.position = spawnPointFromFront.position;
         }
         else if (previousEntryPoint == "back")
         {
             // Mover el jugador al punto correspondiente
-            GameObject.FindWithTag("Player").transform.position = spawnPointFromBack.position;
+            playerInstance.transform.position = spawnPointFromBack.position;
         }
     }
 }
