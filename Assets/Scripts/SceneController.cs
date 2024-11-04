@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour
     void Start()
     {
         PlayerPrefs.DeleteAll();
+        Destroy(GameObject.FindWithTag("Player"));
     }
 
     // Update is called once per frame

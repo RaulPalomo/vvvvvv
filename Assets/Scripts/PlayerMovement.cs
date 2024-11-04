@@ -14,12 +14,16 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
     private Vector2 lastCheckpointPosition;
     private Animator animator;
+    private AudioSource audioSource;
 
+    public AudioClip hitSound;
+    public AudioClip changeGsound;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = rb.GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();    
         lastCheckpointPosition = transform.position;
     }
    
@@ -60,9 +64,8 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             
-            
+            audioSource.PlayOneShot(changeGsound);
             rb.gravityScale= (-rb.gravityScale);
-            //spriteRenderer.flipY = !spriteRenderer.flipY;
             transform.localScale= new Vector3(transform.localScale.x, -transform.localScale.y, transform.localScale.z);
             
 
@@ -76,19 +79,14 @@ public class PlayerMovement : MonoBehaviour
     }
     bool IsGrounded()
     {
-        // Direccion del Raycast basada en el gravityScale del Rigidbody2D
         Vector2 raycastDirection = rb.gravityScale > 0 ? Vector2.down : Vector2.up;
 
-        // Posicion de inicio del raycast (en los pies del objeto)
         Vector2 raycastOrigin = rb.position; // Posición actual del Rigidbody2D
 
-        // Realiza un raycast desde la posición del objeto en la dirección del raycast
         RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, groundCheckDistance, groundLayer);
 
-        // Dibuja el Raycast en la escena para depuración (se puede quitar luego)
         Debug.DrawRay(raycastOrigin, raycastDirection * groundCheckDistance, Color.red);
 
-        // Devuelve true si el raycast golpea algo en la capa del suelo
         return hit.collider != null;
     }
 
@@ -111,12 +109,12 @@ public class PlayerMovement : MonoBehaviour
         
         if (other.CompareTag("Checkpoint"))
         {
-            // Actualizamos la posición del último checkpoint
             lastCheckpointPosition = other.transform.position;
             Debug.Log("Checkpoint alcanzado en: " + lastCheckpointPosition);
         }
         else if (other.CompareTag("DeathZone"))
         {
+            audioSource.PlayOneShot(hitSound);
             rb.velocity = new Vector2(0, 0);
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
             RespawnAtCheckpoint();
@@ -126,24 +124,19 @@ public class PlayerMovement : MonoBehaviour
 
     public void RespawnAtCheckpoint()
     {
-        // Activar la animación de muerte
+        
         animator.SetBool("isDead", true);
 
-        // Iniciar la corrutina para esperar a que la animación termine antes de reaparecer
+        
         StartCoroutine(EsperarAnimacionYRespawn());
     }
 
     IEnumerator EsperarAnimacionYRespawn()
     {
 
-
-
-        // Esperar a que la animación de muerte termine
         yield return new WaitForSeconds(0.3f);
         
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-        // La animación de muerte ha terminado, ahora respawn en el checkpoint
         if (lastCheckpointPosition != Vector2.zero)
         {
             if(rb.gravityScale < 0) { rb.gravityScale *=(-1); transform.localScale = new Vector3(transform.localScale.x, -transform.localScale.y, transform.localScale.z); }
@@ -156,7 +149,6 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("No se ha alcanzado ningún checkpoint.");
         }
 
-        // Finalmente, hacer que isDead sea false
         animator.SetBool("isDead", false);
         Debug.Log("El jugador ha revivido");
     }
