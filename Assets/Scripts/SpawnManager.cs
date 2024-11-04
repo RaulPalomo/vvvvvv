@@ -13,7 +13,7 @@ public class SpawnManager : MonoBehaviour
     {
         playerInstance = GameObject.FindWithTag("Player");
 
-        // Implementación del patrón Singleton
+
         if (playerInstance == null)
         {
             playerInstance = Instantiate(playerPrefab);
@@ -27,15 +27,15 @@ public class SpawnManager : MonoBehaviour
         
         string previousEntryPoint = PlayerPrefs.GetString("PreviousEntryPoint", "front");
 
-        // Mover al jugador dependiendo de su origen
+
         if (previousEntryPoint == "front")
         {
-            // Mover el jugador al punto correspondiente
+
             playerInstance.transform.position = spawnPointFromFront.position;
         }
         else if (previousEntryPoint == "back")
         {
-            // Mover el jugador al punto correspondiente
+
             playerInstance.transform.position = spawnPointFromBack.position;
         }
     }
