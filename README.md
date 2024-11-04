@@ -6,3 +6,4 @@ Se trata de una adaptación del clásico vvvvvv, un plataformas 2D en este caso 
 - Fletxa derecha --> movimiento horizontal hacia la derecha
 - Espacio --> cambio de gravedad
 - Escape --> pausa 
+ 
