@@ -108,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Verificamos si el objeto con el que hemos colisionado es un checkpoint
+        
         if (other.CompareTag("Checkpoint"))
         {
             // Actualizamos la posición del último checkpoint
@@ -124,23 +124,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    // Método para reaparecer al jugador en el último checkpoint
-    /*public void RespawnAtCheckpoint()
-    {
-        animator.SetBool("isDead", true);
-
-        
-        if (lastCheckpointPosition != Vector2.zero)
-        {
-            transform.position = lastCheckpointPosition;
-            Debug.Log("Reapareciendo en: " + lastCheckpointPosition);
-        }
-        else
-        {
-            Debug.Log("No se ha alcanzado ningún checkpoint.");
-        }
-        
-    }*/
     public void RespawnAtCheckpoint()
     {
         // Activar la animación de muerte
