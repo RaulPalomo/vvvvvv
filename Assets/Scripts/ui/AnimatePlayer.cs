@@ -8,7 +8,7 @@ public class AnimatePlayer : MonoBehaviour , IPointerEnterHandler, IPointerExitH
 {
     public Animator characterAnimator;
 
-    // Método que se ejecuta cuando el ratón entra en el botón
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log("Mouse enter");
@@ -17,7 +17,7 @@ public class AnimatePlayer : MonoBehaviour , IPointerEnterHandler, IPointerExitH
         
     }
 
-    // Método que se ejecuta cuando el ratón sale del botón
+
     public void OnPointerExit(PointerEventData eventData)
     {
         Debug.Log("Mouse exit");
